@@ -17,6 +17,11 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
+	<modules>
+		<module>main-service</module>
+		<module>statistics</module>
+	</modules>
+
 	<properties>
 		<java.version>11</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -57,6 +62,10 @@
 							<groupId>com.puppycrawl.tools</groupId>
 							<artifactId>checkstyle</artifactId>
 							<version>10.3</version>
+						</dependency>
+						<dependency>
+							<groupId>jakarta.validation</groupId>
+							<artifactId>jakarta.validation-api</artifactId>
 						</dependency>
 					</dependencies>
 				</plugin>
