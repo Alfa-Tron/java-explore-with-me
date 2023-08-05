@@ -1,18 +1,5 @@
 version: '3.1'
 services:
-  stats-server:
-    build: ./statistics/server
-    container_name: stServer
-    image: st-s
-    depends_on:
-      - stats-db
-    ports:
-      - "9090:9090"
-    environment:
-      - SERVER_PORT=9090
-      - DB_URL=jdbc:postgresql://stats-db:5432/stats-db
-      - POSTGRES_USER=test
-      - POSTGRES_PASSWORD=test
 
   stats-db:
     image: postgres:14-alpine
@@ -23,6 +10,20 @@ services:
       - POSTGRES_DB=stats-db
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=root
+
+  stats-server:
+    build: ./statistics/server
+    container_name: stServer
+    image: st-s
+    depends_on:
+      - stats-db
+    ports:
+      - "9090:9090"
+    environment:
+      - SERVER_PORT=9090
+      - DB_URL=jdbc:postgresql://stats-db:5433/stats-db
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test
 
 
 
@@ -39,10 +40,3 @@ services:
       - CLIENT_PORT=8080
       - STATS_SERVER_URL=http://stats-server:9090
 
-
-  ewn-service:
-    ports:
-      - "8080:8080"
-
-  ewm-db:
-    image: postgres:14-alpine
