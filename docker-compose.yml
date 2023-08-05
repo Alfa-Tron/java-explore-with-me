@@ -15,7 +15,7 @@ services:
   stats-db:
     build:
       context: ./
-      dockerfile: Dockerfile.postgres
+      dockerfile: Dockerfile
     container_name: stats-db-postgres
     ports:
       - "7654:5432"
