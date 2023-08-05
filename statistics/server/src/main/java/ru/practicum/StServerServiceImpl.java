@@ -29,7 +29,6 @@ public class StServerServiceImpl implements StServerService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime startBd = LocalDateTime.parse(start, formatter);
         LocalDateTime endBd = LocalDateTime.parse(end, formatter);
-        {
             if (unique && !uris.isEmpty()) {
                 return stRepository.getUrisWithUniqueIP(startBd, endBd, uris);
             } else if (!uris.isEmpty()) {
@@ -39,7 +38,6 @@ public class StServerServiceImpl implements StServerService {
             } else {
                 return stRepository.getAllUrisStats(startBd, endBd);
             }
-        }
     }
 
 }
