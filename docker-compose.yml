@@ -33,6 +33,7 @@ services:
   ewm-db:
     image: postgres:15-alpine
 
+
     ports:
       - "6543:5432"
 
