@@ -13,7 +13,6 @@ services:
 
 
   stats-db:
-    image: postgres:15-alpine
     build:
       context: ./
       dockerfile: Dockerfile.postgres
