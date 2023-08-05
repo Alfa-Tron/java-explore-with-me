@@ -34,7 +34,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    container_name: stats-db-postgres
+    container_name: ewn-db
     ports:
             - "6543:5432"
 
