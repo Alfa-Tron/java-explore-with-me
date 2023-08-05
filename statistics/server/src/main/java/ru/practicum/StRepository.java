@@ -11,12 +11,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface StRepository extends JpaRepository<EndpointHit,Long> {
+public interface StRepository extends JpaRepository<EndpointHit, Long> {
     @Query("SELECT new ru.practicum.model.ViewStatsDto(h.app, h.uri, COUNT(DISTINCT h.ip)) FROM EndpointHit AS h WHERE h.timestamp BETWEEN :start AND :end AND h.uri in :uris GROUP BY h.app, h.uri ORDER BY COUNT(h.ip) DESC")
     List<ViewStatsDto> getUrisWithUniqueIP(
-             LocalDateTime start,
-             LocalDateTime end,
-             List<String> uris
+            LocalDateTime start,
+            LocalDateTime end,
+            List<String> uris
     );
 
     @Query("SELECT new ru.practicum.model.ViewStatsDto(h.app, h.uri, COUNT(h.id)) " +

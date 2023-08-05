@@ -22,10 +22,10 @@ public class StaticsController {
     @GetMapping("/stats")
     public ResponseEntity<Object> getStats(@RequestParam(name = "start") String start,
                                            @RequestParam(name = "end") String end,
-                                           @RequestParam(name = "unique",defaultValue = "false") boolean unique,
-                                           @RequestParam(name = "uris",required = false) List<String> uris) {
+                                           @RequestParam(name = "unique", defaultValue = "false") boolean unique,
+                                           @RequestParam(name = "uris", required = false) List<String> uris) {
 
-        return staticsClient.getStats(start,end,unique,uris);
+        return staticsClient.getStats(start, end, unique, uris);
     }
 
     @PostMapping("/hit")

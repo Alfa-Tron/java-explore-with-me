@@ -2,7 +2,6 @@ package ru.practicum;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +16,7 @@ public class EndpointDtoIn {
     @NotNull
     private String app;
     @NotNull
-    private  String uri;
+    private String uri;
     @NotNull
     private String ip;
     @NotNull

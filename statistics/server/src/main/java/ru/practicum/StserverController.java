@@ -21,16 +21,16 @@ public class StserverController {
     @GetMapping("/stats")
     public List<ViewStatsDto> getStats(@RequestParam(name = "start") String start,
                                        @RequestParam(name = "end") String end,
-                                       @RequestParam(name = "unique",defaultValue = "false") boolean unique,
-                                       @RequestParam(name = "uris",required = false) List<String> uris) {
-        if(uris==null){
-            uris= Collections.emptyList();
+                                       @RequestParam(name = "unique", defaultValue = "false") boolean unique,
+                                       @RequestParam(name = "uris", required = false) List<String> uris) {
+        if (uris == null) {
+            uris = Collections.emptyList();
         }
-        return stServerService.getStats(start,end,unique,uris);
+        return stServerService.getStats(start, end, unique, uris);
     }
 
     @PostMapping("/hit")
-    public void saveStats(@RequestBody  EndpointDtoIn endpointDtoIn) {
+    public void saveStats(@RequestBody EndpointDtoIn endpointDtoIn) {
         stServerService.saveStats(endpointMapper.endpointHitDtoToEndpointHit(endpointDtoIn));
 
     }
