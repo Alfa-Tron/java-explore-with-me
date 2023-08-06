@@ -10,6 +10,7 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 import ru.practicum.EndpointDtoIn;
 import ru.practicum.baseClient.BaseClient;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,15 +32,16 @@ public class StaticsClient extends BaseClient {
         return post("/hit", endpointDtoIn);
     }
 
-    public ResponseEntity<Object> getStats(String start,
-                                           String end,
+    public ResponseEntity<Object> getStats(LocalDateTime start,
+                                           LocalDateTime end,
                                            boolean unique,
                                            List<String> uris) {
+
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("start", start);
         parameters.put("end", end);
         parameters.put("unique", unique);
-        parameters.put("uris", uris);
+        parameters.put("uris", String.join("&uris={uris}",uris));
         return get("/stats?start={start}&end={end}&uris={uri}&unique={unique}", null, parameters);
 
     }

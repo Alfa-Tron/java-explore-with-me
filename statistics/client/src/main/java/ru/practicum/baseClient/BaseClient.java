@@ -89,16 +89,6 @@ public class BaseClient {
         return prepareGatewayResponse(shareitServerResponse);
     }
 
-    private HttpHeaders defaultHeaders(Long userId) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-        if (userId != null) {
-            headers.set("X-Sharer-User-Id", String.valueOf(userId));
-        }
-        return headers;
-    }
-
     private static ResponseEntity<Object> prepareGatewayResponse(ResponseEntity<Object> response) {
         if (response.getStatusCode().is2xxSuccessful()) {
             return response;

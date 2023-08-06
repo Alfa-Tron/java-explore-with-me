@@ -25,18 +25,16 @@ public class StServerServiceImpl implements StServerService {
     }
 
     @Override
-    public List<ViewStatsDto> getStats(String start, String end, boolean unique, List<String> uris) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime startBd = LocalDateTime.parse(start, formatter);
-        LocalDateTime endBd = LocalDateTime.parse(end, formatter);
+    public List<ViewStatsDto> getStats(LocalDateTime start, LocalDateTime end, boolean unique, List<String> uris) {
+
             if (unique && !uris.isEmpty()) {
-                return stRepository.getUrisWithUniqueIP(startBd, endBd, uris);
+                return stRepository.getUrisWithUniqueIP(start, end, uris);
             } else if (!uris.isEmpty()) {
-                return stRepository.getUrisStats(startBd, endBd, uris);
+                return stRepository.getUrisStats(start, end, uris);
             } else if (unique) {
-                return stRepository.getAllUrisWithUniqueIP(startBd, endBd);
+                return stRepository.getAllUrisWithUniqueIP(start, end);
             } else {
-                return stRepository.getAllUrisStats(startBd, endBd);
+                return stRepository.getAllUrisStats(start, end);
             }
     }
 

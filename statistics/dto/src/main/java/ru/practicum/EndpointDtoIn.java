@@ -11,15 +11,9 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class EndpointDtoIn {
-    @NotNull
-    private Integer id;
-    @NotNull
     private String app;
-    @NotNull
     private String uri;
-    @NotNull
     private String ip;
-    @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime timestamp;
 }
