@@ -19,7 +19,7 @@ public class StserverController {
 
     @GetMapping("/stats")
     public List<ViewStatsDto> getStats(@RequestParam(name = "start") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
-                                       @RequestParam(name = "end") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")LocalDateTime end,
+                                       @RequestParam(name = "end") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
                                        @RequestParam(name = "unique", defaultValue = "false") boolean unique,
                                        @RequestParam(name = "uris", required = false) List<String> uris) {
 
