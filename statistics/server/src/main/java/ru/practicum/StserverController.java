@@ -9,7 +9,6 @@ import ru.practicum.Mapper.EndPointMapper;
 import ru.practicum.model.ViewStatsDto;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
