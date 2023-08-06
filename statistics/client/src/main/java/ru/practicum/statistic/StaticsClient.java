@@ -41,7 +41,7 @@ public class StaticsClient extends BaseClient {
         parameters.put("start", start);
         parameters.put("end", end);
         parameters.put("unique", unique);
-        parameters.put("uris", String.join("&uris={uris}",uris));
+        parameters.put("uris", String.join(",",uris));
         return get("/stats?start={start}&end={end}&uris={uri}&unique={unique}", null, parameters);
 
     }
