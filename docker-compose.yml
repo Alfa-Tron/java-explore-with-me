@@ -18,7 +18,7 @@ services:
       dockerfile: Dockerfile
     container_name: stats-db-postgres
     ports:
-      - "7654:5432"
+      - "6541:5432"
     environment:
       - POSTGRES_DB=ewm-stats
       - POSTGRES_USER=postgres
@@ -33,10 +33,11 @@ services:
       - "8080:8080"
     depends_on:
       - ewm-db
+      - stats-server
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm-main
-      - POSTGRES_USER=ewm-main
-      - POSTGRES_PASSWORD=ewm-main
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
 
   ewm-db:
     image: postgres:14-alpine

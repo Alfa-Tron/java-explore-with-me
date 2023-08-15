@@ -19,7 +19,7 @@ import java.util.Map;
 public class StaticsClient extends BaseClient {
 
     @Autowired
-    public StaticsClient(@Value("http://localhost:9090") String serverUrl, RestTemplateBuilder builder) {
+    public StaticsClient(@Value("http://stats-server:9090") String serverUrl, RestTemplateBuilder builder) {
         super(
                 builder
                         .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))

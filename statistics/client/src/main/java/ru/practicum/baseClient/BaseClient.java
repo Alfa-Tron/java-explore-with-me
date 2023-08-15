@@ -54,7 +54,7 @@ public class BaseClient {
         String st = URLEncoder.encode(start.format(formatter), StandardCharsets.UTF_8);
         String en = URLEncoder.encode(end.format(formatter), StandardCharsets.UTF_8);
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("http://localhost:9090/stats")
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("http://stats-server:9090/stats")
                 .queryParam("start", st)
                 .queryParam("end", en)
                 .queryParam("uris", uris)
