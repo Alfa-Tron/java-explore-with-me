@@ -31,7 +31,7 @@ public class AdminCategoriesServiceImpl implements AdminCategoriesService {
     @Override
     @Transactional
     public CategoryDto update(Long catId, Category category) {
-        Category categoryNew = categoryRepository.findById(catId).orElseThrow(()-> new ObjectNotFoundException(String.format("Category with id=%s was not found", catId)));
+        Category categoryNew = categoryRepository.findById(catId).orElseThrow(() -> new ObjectNotFoundException(String.format("Category with id=%s was not found", catId)));
 
         categoryNew.setName(category.getName());
         return categoryMapper.categoryToDTO(categoryNew);

@@ -17,18 +17,18 @@ public class EventMapperImpl implements EventMapper {
 
 
     @Override
-    public Event NewEventDtoToEvent(NewEventDto dto, Category category, Location location, User user) {
+    public Event newEventDtoToEvent(NewEventDto dto, Category category, Location location, User user) {
         return new Event(dto.getAnnotation(), dto.getDescription(), dto.getEventDate(), dto.getPaid(), dto.getParticipantLimit(), dto.getRequestModeration(), dto.getTitle(), category, location, user);
     }
 
     @Override
-    public EventFullDto ToFullEventDto(Event savedEvent, CategoryDto category, LocationDto locationDto, UserShortDto userShortDto) {
+    public EventFullDto toFullEventDto(Event savedEvent, CategoryDto category, LocationDto locationDto, UserShortDto userShortDto) {
         EventFullDto f = new EventFullDto(savedEvent.getAnnotation(), category, savedEvent.getParticipants().size(), savedEvent.getCreatedOn(), savedEvent.getDescription(), savedEvent.getEventDate(), savedEvent.getId(), userShortDto, locationDto, savedEvent.getPaid(), savedEvent.getParticipantLimit(), savedEvent.getPublishedOn(), savedEvent.getRequestModeration(), savedEvent.getState(), savedEvent.getTitle(), 0);
         return new EventFullDto(savedEvent.getAnnotation(), category, savedEvent.getParticipants().size(), savedEvent.getCreatedOn(), savedEvent.getDescription(), savedEvent.getEventDate(), savedEvent.getId(), userShortDto, locationDto, savedEvent.getPaid(), savedEvent.getParticipantLimit(), savedEvent.getPublishedOn(), savedEvent.getRequestModeration(), savedEvent.getState(), savedEvent.getTitle(), 0);
     }
 
     @Override
-    public EventShortDto EventToShortDto(Event e, CategoryDto categoryDto, UserShortDto userDto) {
+    public EventShortDto eventToShortDto(Event e, CategoryDto categoryDto, UserShortDto userDto) {
         return new EventShortDto(e.getAnnotation(), categoryDto, 0, e.getEventDate(), e.getId(), userDto, e.getPaid(), e.getTitle());
     }
 }

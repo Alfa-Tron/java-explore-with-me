@@ -12,9 +12,9 @@ import ru.practicum.model.Location;
 import ru.practicum.model.User;
 
 public interface EventMapper {
-    Event NewEventDtoToEvent(NewEventDto newEventDto, Category category, Location location, User user);
+    Event newEventDtoToEvent(NewEventDto newEventDto, Category category, Location location, User user);
 
-    EventFullDto ToFullEventDto(Event savedEvent, CategoryDto category, LocationDto locationDto, UserShortDto userShortDto);
+    EventFullDto toFullEventDto(Event savedEvent, CategoryDto category, LocationDto locationDto, UserShortDto userShortDto);
 
-    EventShortDto EventToShortDto(Event e, CategoryDto categoryDto, UserShortDto userDto);
+    EventShortDto eventToShortDto(Event e, CategoryDto categoryDto, UserShortDto userDto);
 }

@@ -38,6 +38,7 @@ public class ErrorHandler {
     public ErrorResponse handleBadRequestException(BadRequestException e) {
         return new ErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST.name(), "bad parametrs", Arrays.toString(e.getStackTrace()));
     }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleDataIntegrityViolationException(DataIntegrityViolationException e) {

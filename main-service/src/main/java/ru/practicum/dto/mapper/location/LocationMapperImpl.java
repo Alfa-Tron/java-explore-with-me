@@ -7,12 +7,12 @@ import ru.practicum.model.Location;
 @Component
 public class LocationMapperImpl implements LocationMapper {
     @Override
-    public LocationDto LcToLocationDto(Location location) {
+    public LocationDto lcToLocationDto(Location location) {
         return new LocationDto(location.getLat(), location.getLon());
     }
 
     @Override
-    public Location DtoToLocation(LocationDto dto) {
+    public Location dtoToLocation(LocationDto dto) {
         return new Location(dto.getLat(), dto.getLon());
     }
 }

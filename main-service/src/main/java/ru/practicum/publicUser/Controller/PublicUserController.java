@@ -14,6 +14,7 @@ import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.model.EventSortType;
 import ru.practicum.publicUser.service.PublicUserService;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Min;
 import java.time.LocalDateTime;

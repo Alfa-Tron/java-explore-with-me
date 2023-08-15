@@ -1,6 +1,5 @@
 package ru.practicum.admin.Controller;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -24,7 +23,6 @@ import ru.practicum.dto.mapper.caregory.CategoryMapper;
 import ru.practicum.dto.mapper.user.UserMapper;
 import ru.practicum.model.EventState;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.time.LocalDateTime;

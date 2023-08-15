@@ -4,7 +4,7 @@ import ru.practicum.dto.location.LocationDto;
 import ru.practicum.model.Location;
 
 public interface LocationMapper {
-    LocationDto LcToLocationDto(Location location);
+    LocationDto lcToLocationDto(Location location);
 
-    Location DtoToLocation(LocationDto dto);
+    Location dtoToLocation(LocationDto dto);
 }
