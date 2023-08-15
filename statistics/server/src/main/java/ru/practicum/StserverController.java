@@ -22,17 +22,16 @@ public class StserverController {
 
 
     @GetMapping("/stats")
-    public List<ViewStatsDto> getStats(@RequestParam(name = "start")  String  start,
+    public List<ViewStatsDto> getStats(@RequestParam(name = "start") String start,
                                        @RequestParam(name = "end") String end,
                                        @RequestParam(name = "unique", defaultValue = "false") boolean unique,
                                        @RequestParam(name = "uris", required = false) List<String> uris) {
-        String  s = URLDecoder.decode(start, StandardCharsets.UTF_8);
-        String e =URLDecoder.decode(end,StandardCharsets.UTF_8);
-        String ss = URLDecoder.decode(s,StandardCharsets.UTF_8);// не понимаю почему приходится 2 раза декодировать
-        String ee = URLDecoder.decode(e,StandardCharsets.UTF_8);
+        String s = URLDecoder.decode(start, StandardCharsets.UTF_8);
+        String e = URLDecoder.decode(end, StandardCharsets.UTF_8);
+        String ss = URLDecoder.decode(s, StandardCharsets.UTF_8);// не понимаю почему приходится 2 раза декодировать
+        String ee = URLDecoder.decode(e, StandardCharsets.UTF_8);
         LocalDateTime start1 = LocalDateTime.parse(ss, formatter);
-        LocalDateTime end1 = LocalDateTime.parse(ee,formatter);
-
+        LocalDateTime end1 = LocalDateTime.parse(ee, formatter);
 
 
         return stServerService.getStats(start1, end1, unique, uris);
