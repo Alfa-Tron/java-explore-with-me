@@ -19,7 +19,7 @@ import java.util.Map;
 public class StaticsClient extends BaseClient {
 
     @Autowired
-    public StaticsClient(@Value("${shareit-server.url}") String serverUrl, RestTemplateBuilder builder) {
+    public StaticsClient(@Value("http://localhost:9090") String serverUrl, RestTemplateBuilder builder) {
         super(
                 builder
                         .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))
@@ -42,7 +42,7 @@ public class StaticsClient extends BaseClient {
         parameters.put("end", end);
         parameters.put("unique", unique);
         parameters.put("uris", String.join(",",uris));
-        return get("/stats?start={start}&end={end}&uris={uri}&unique={unique}", null, parameters);
+        return get(start,end,unique,uris);
 
     }
 }

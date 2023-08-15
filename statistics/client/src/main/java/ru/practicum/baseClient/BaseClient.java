@@ -1,11 +1,19 @@
 package ru.practicum.baseClient;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.*;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 
 public class BaseClient {
@@ -16,65 +24,41 @@ public class BaseClient {
     }
 
 
-    protected <T> ResponseEntity<Object> get(String path, T body) {
-        return makeAndSendRequest(HttpMethod.GET, path, null, null, body);
-    }
-
-    protected ResponseEntity<Object> get(String path, Long userId, @Nullable Map<String, Object> parameters) {
-        return makeAndSendRequest(HttpMethod.GET, path, userId, parameters, null);
+    protected ResponseEntity<Object> get(LocalDateTime start, LocalDateTime end, boolean unique, List<String> uris) {
+        return makeAndSendRequest(start,end,unique,uris);
     }
 
     protected <T> ResponseEntity<Object> post(String path, T body) {
         return post(path, null, null, body);
     }
 
-    protected <T> ResponseEntity<Object> post(String path, long userId, T body) {
-        return post(path, userId, null, body);
-    }
 
     protected <T> ResponseEntity<Object> post(String path, Long userId, @Nullable Map<String, Object> parameters, T body) {
         return makeAndSendRequest(HttpMethod.POST, path, userId, parameters, body);
     }
 
-    protected <T> ResponseEntity<Object> put(String path, long userId, T body) {
-        return put(path, userId, null, body);
+    private  <T> ResponseEntity<Object> makeAndSendRequest(LocalDateTime start, LocalDateTime end, boolean unique, List<String> uris)  {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String st = URLEncoder.encode(start.format(formatter), StandardCharsets.UTF_8);
+        String en = URLEncoder.encode(end.format(formatter), StandardCharsets.UTF_8);
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("http://localhost:9090/stats")
+                .queryParam("start", st)
+                .queryParam("end", en)
+                .queryParam("uris", uris)
+                .queryParam("unique", unique);
+
+        String finalUrl = builder.toUriString();
+
+        ResponseEntity<Object> response = rest.getForEntity(finalUrl, Object.class);
+      return   ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
 
-    protected <T> ResponseEntity<Object> put(String path, long userId, @Nullable Map<String, Object> parameters, T body) {
-        return makeAndSendRequest(HttpMethod.PUT, path, userId, parameters, body);
-    }
 
-    protected <T> ResponseEntity<Object> patch(String path, T body) {
-        return patch(path, null, null, body);
-    }
 
-    protected <T> ResponseEntity<Object> patch(String path, long userId) {
-        return patch(path, userId, null, null);
-    }
-
-    protected <T> ResponseEntity<Object> patch(String path, long userId, T body) {
-        return patch(path, userId, null, body);
-    }
-
-    protected <T> ResponseEntity<Object> patch(String path, Long userId, @Nullable Map<String, Object> parameters, T body) {
-        return makeAndSendRequest(HttpMethod.PATCH, path, userId, parameters, body);
-    }
-
-    protected ResponseEntity<Object> delete(String path) {
-        return delete(path, null, null);
-    }
-
-    protected ResponseEntity<Object> delete(String path, long userId) {
-        return delete(path, userId, null);
-    }
-
-    protected ResponseEntity<Object> delete(String path, Long userId, @Nullable Map<String, Object> parameters) {
-        return makeAndSendRequest(HttpMethod.DELETE, path, userId, parameters, null);
-    }
 
     private <T> ResponseEntity<Object> makeAndSendRequest(HttpMethod method, String path, Long userId, @Nullable Map<String, Object> parameters, @NonNull T body) {
         HttpEntity<T> requestEntity = new HttpEntity<>(body);
-
         ResponseEntity<Object> shareitServerResponse;
         try {
             if (parameters != null) {
