@@ -14,7 +14,6 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleTimestampException(final TimestampException e) {
-        log.warn("Timestamp Exception", e);
         return new ErrorResponse(
                 e.getMessage(), Arrays.toString(e.getStackTrace())
         );

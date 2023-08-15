@@ -1,9 +1,14 @@
 package ru.practicum;
 
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class ErrorResponse {
-    private final String error;
-    private final String stackTrace;
+    private  String error;
+    private  String stackTrace;
 
 
     public ErrorResponse(String error, String stackTrace) {
