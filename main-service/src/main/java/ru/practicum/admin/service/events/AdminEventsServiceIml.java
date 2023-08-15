@@ -64,9 +64,9 @@ public class AdminEventsServiceIml implements AdminEventsService {
         result = StreamSupport.stream(events.spliterator(), false).collect(Collectors.toList());
 
         return result.stream()
-                .map(e -> eventMapper.ToFullEventDto(e,
+                .map(e -> eventMapper.toFullEventDto(e,
                         categoryMapper.categoryToDTO(e.getCategory()),
-                        locationMapper.LcToLocationDto(e.getLocation()),
+                        locationMapper.lcToLocationDto(e.getLocation()),
                         userMapper.userToUserShort(e.getInitiator())))
                 .collect(Collectors.toList());
     }
@@ -103,9 +103,9 @@ public class AdminEventsServiceIml implements AdminEventsService {
 
         Event updatedEvent = eventRepository.save(event);
 
-        return eventMapper.ToFullEventDto(updatedEvent,
+        return eventMapper.toFullEventDto(updatedEvent,
                 categoryMapper.categoryToDTO(updatedEvent.getCategory()),
-                locationMapper.LcToLocationDto(updatedEvent.getLocation()),
+                locationMapper.lcToLocationDto(updatedEvent.getLocation()),
                 userMapper.userToUserShort(updatedEvent.getInitiator()));
     }
 
@@ -177,7 +177,7 @@ public class AdminEventsServiceIml implements AdminEventsService {
                 locationDto.getLon());
 
         if (Objects.isNull(location)) {
-            location = locationRepository.save(locationMapper.DtoToLocation(locationDto));
+            location = locationRepository.save(locationMapper.dtoToLocation(locationDto));
         }
         return location;
     }

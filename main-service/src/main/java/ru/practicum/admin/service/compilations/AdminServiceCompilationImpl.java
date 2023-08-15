@@ -32,6 +32,7 @@ public class AdminServiceCompilationImpl implements AdminServiceCompilation {
     private final CategoryMapper categoryMapper;
     private final UserMapper userMapper;
 
+
     @Override
     @Transactional
     public CompilationDto createCompilation(NewCompilationDto newCompilationDto) {
@@ -45,8 +46,8 @@ public class AdminServiceCompilationImpl implements AdminServiceCompilation {
 
         Compilation savedCompilation = compilationRepository.save(compilation);
 
-        return compilationMapper.CompToDto(savedCompilation, events.stream()
-                .map(e -> eventMapper.EventToShortDto(e,
+        return compilationMapper.compToDto(savedCompilation, events.stream()
+                .map(e -> eventMapper.eventToShortDto(e,
                         categoryMapper.categoryToDTO(e.getCategory()),
                         userMapper.userToUserShort(e.getInitiator())))
                 .collect(Collectors.toList()));
@@ -82,8 +83,8 @@ public class AdminServiceCompilationImpl implements AdminServiceCompilation {
 
         Compilation savedCompilation = compilationRepository.save(compilation);
 
-        return compilationMapper.CompToDto(savedCompilation, events.stream()
-                .map(e -> eventMapper.EventToShortDto(e,
+        return compilationMapper.compToDto(savedCompilation, events.stream()
+                .map(e -> eventMapper.eventToShortDto(e,
                         categoryMapper.categoryToDTO(e.getCategory()),
                         userMapper.userToUserShort(e.getInitiator())))
                 .collect(Collectors.toList()));

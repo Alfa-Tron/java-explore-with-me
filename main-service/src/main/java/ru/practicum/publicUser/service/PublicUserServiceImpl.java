@@ -57,8 +57,8 @@ public class PublicUserServiceImpl implements PublicUserService {
         List<Compilation> compilations = compilationRepository.findAllByPinned(pinned, pageable);
 
         return compilations.stream()
-                .map(c -> compilationMapper.CompToDto(c, c.getEvents().stream()
-                        .map(e -> eventMapper.EventToShortDto(e, categoryMapper.categoryToDTO(e.getCategory()), userMapper.userToUserShort(e.getInitiator())))
+                .map(c -> compilationMapper.compToDto(c, c.getEvents().stream()
+                        .map(e -> eventMapper.eventToShortDto(e, categoryMapper.categoryToDTO(e.getCategory()), userMapper.userToUserShort(e.getInitiator())))
                         .collect(Collectors.toList()))).collect(Collectors.toList());
     }
 
@@ -66,8 +66,8 @@ public class PublicUserServiceImpl implements PublicUserService {
     public CompilationDto getCompilationById(Long compId) {
 
         Compilation compilation = compilationRepository.findById(compId).orElseThrow(() -> new ObjectNotFoundException(String.format("Compilation with id=%s was not found", compId)));
-        return compilationMapper.CompToDto(compilation, compilation.getEvents().stream()
-                .map(e -> eventMapper.EventToShortDto(e,
+        return compilationMapper.compToDto(compilation, compilation.getEvents().stream()
+                .map(e -> eventMapper.eventToShortDto(e,
                         categoryMapper.categoryToDTO(e.getCategory()),
                         userMapper.userToUserShort(e.getInitiator())))
                 .collect(Collectors.toList()));
@@ -146,7 +146,7 @@ public class PublicUserServiceImpl implements PublicUserService {
             hits = getStatsFromEvents(result);
         }
         List<EventShortDto> eventShortDtos = result.stream()
-                .map(e -> eventMapper.EventToShortDto(e, categoryMapper.categoryToDTO(e.getCategory()), userMapper.userToUserShort(e.getInitiator())))
+                .map(e -> eventMapper.eventToShortDto(e, categoryMapper.categoryToDTO(e.getCategory()), userMapper.userToUserShort(e.getInitiator())))
                 .collect(Collectors.toList());
 
         for (EventShortDto eventShortDto : eventShortDtos) {
@@ -196,9 +196,9 @@ public class PublicUserServiceImpl implements PublicUserService {
         Event event = eventRepository.findByIdAndPublished(id).orElseThrow(() ->
                 new ObjectNotFoundException(String.format("Event with id=%s was not found", id)));
 
-        EventFullDto eventFullDto = eventMapper.ToFullEventDto(event,
+        EventFullDto eventFullDto = eventMapper.toFullEventDto(event,
                 categoryMapper.categoryToDTO(event.getCategory()),
-                locationMapper.LcToLocationDto(event.getLocation()),
+                locationMapper.lcToLocationDto(event.getLocation()),
                 userMapper.userToUserShort(event.getInitiator()));
 
         createHit(request);

@@ -61,13 +61,13 @@ public class PrivateUserServiceImpl implements PrivateUserService {
                 () -> new ObjectNotFoundException(String.format("User with id=%s was not found", userId)));
 
         Location location = getLocationOrAddNew(newEventDto.getLocation());
-        LocationDto locationDto = locationMapper.LcToLocationDto(location);
+        LocationDto locationDto = locationMapper.lcToLocationDto(location);
         Category category = categoryRepository.findById(newEventDto.getCategory()).orElseThrow(() -> new ObjectNotFoundException(String.format("Category with id=%s was not found", newEventDto.getCategory())));
         CategoryDto categoryDto = categoryMapper.categoryToDTO(category);
-        Event event = eventMapper.NewEventDtoToEvent(newEventDto, category, location, user);
+        Event event = eventMapper.newEventDtoToEvent(newEventDto, category, location, user);
         UserShortDto userShortDto = userMapper.userToUserShort(user);
         Event savedEvent = eventRepository.save(event);
-        return eventMapper.ToFullEventDto(savedEvent, categoryDto, locationDto, userShortDto);
+        return eventMapper.toFullEventDto(savedEvent, categoryDto, locationDto, userShortDto);
 
     }
 
@@ -77,7 +77,7 @@ public class PrivateUserServiceImpl implements PrivateUserService {
                 locationDto.getLon());
 
         if (Objects.isNull(location)) {
-            location = locationRepository.save(locationMapper.DtoToLocation(locationDto));
+            location = locationRepository.save(locationMapper.dtoToLocation(locationDto));
         }
         return location;
     }
@@ -101,7 +101,7 @@ public class PrivateUserServiceImpl implements PrivateUserService {
         Map<Long, Integer> hits = getStatsFromEvents(events);
 
         return events.stream()
-                .map(e -> eventMapper.EventToShortDto(e, categoryMapper.categoryToDTO(e.getCategory()), userMapper.userToUserShort(e.getInitiator())))
+                .map(e -> eventMapper.eventToShortDto(e, categoryMapper.categoryToDTO(e.getCategory()), userMapper.userToUserShort(e.getInitiator())))
                 .peek(e -> e.setViews(hits.getOrDefault(e.getId(), 0)))
                 .collect(Collectors.toList());
     }
@@ -139,9 +139,9 @@ public class PrivateUserServiceImpl implements PrivateUserService {
 
         Map<Long, Integer> hits = getStatsFromEvents(List.of(event));
 
-        EventFullDto eventFullDto = eventMapper.ToFullEventDto(event,
+        EventFullDto eventFullDto = eventMapper.toFullEventDto(event,
                 categoryMapper.categoryToDTO(event.getCategory()),
-                locationMapper.LcToLocationDto(event.getLocation()),
+                locationMapper.lcToLocationDto(event.getLocation()),
                 userMapper.userToUserShort(event.getInitiator()));
 
         eventFullDto.setViews(hits.getOrDefault(eventId, 0));
@@ -186,9 +186,9 @@ public class PrivateUserServiceImpl implements PrivateUserService {
 
         Map<Long, Integer> hits = getStatsFromEvents(List.of(event));
 
-        EventFullDto eventFullDto = eventMapper.ToFullEventDto(updatedEvent,
+        EventFullDto eventFullDto = eventMapper.toFullEventDto(updatedEvent,
                 categoryMapper.categoryToDTO(updatedEvent.getCategory()),
-                locationMapper.LcToLocationDto(updatedEvent.getLocation()),
+                locationMapper.lcToLocationDto(updatedEvent.getLocation()),
                 userMapper.userToUserShort(updatedEvent.getInitiator()));
 
         eventFullDto.setViews(hits.getOrDefault(eventId, 0));
