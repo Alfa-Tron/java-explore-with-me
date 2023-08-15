@@ -25,6 +25,9 @@ public class StServerServiceImpl implements StServerService {
 
     @Override
     public List<ViewStatsDto> getStats(LocalDateTime start, LocalDateTime end, boolean unique, List<String> uris) {
+        if (start.isAfter(end)) {
+            throw new TimestampException("Время окончания не может быть раньше времени начала.");
+        }
         if (uris != null && unique && !uris.isEmpty()) {
             return stRepository.getUrisWithUniqueIP(start, end, uris);
         } else if (uris != null && !uris.isEmpty()) {
