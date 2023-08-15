@@ -295,7 +295,7 @@ public class PrivateUserServiceImpl implements PrivateUserService {
         Request request = requestRepository.findById(requestId).orElseThrow(
                 () -> new ObjectNotFoundException(String.format("Request with id=%s was not found", requestId)));
 
-        if (user.getId() != (request.getRequester().getId())) {
+        if (!user.getId().equals(request.getRequester().getId())) {
             throw new ConflictException(String.format("User with id=%s can't cancel request with id=%s",
                     userId, requestId));
         }

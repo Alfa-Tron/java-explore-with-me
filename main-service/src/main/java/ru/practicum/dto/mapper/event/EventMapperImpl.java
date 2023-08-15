@@ -23,7 +23,6 @@ public class EventMapperImpl implements EventMapper {
 
     @Override
     public EventFullDto toFullEventDto(Event savedEvent, CategoryDto category, LocationDto locationDto, UserShortDto userShortDto) {
-        EventFullDto f = new EventFullDto(savedEvent.getAnnotation(), category, savedEvent.getParticipants().size(), savedEvent.getCreatedOn(), savedEvent.getDescription(), savedEvent.getEventDate(), savedEvent.getId(), userShortDto, locationDto, savedEvent.getPaid(), savedEvent.getParticipantLimit(), savedEvent.getPublishedOn(), savedEvent.getRequestModeration(), savedEvent.getState(), savedEvent.getTitle(), 0);
         return new EventFullDto(savedEvent.getAnnotation(), category, savedEvent.getParticipants().size(), savedEvent.getCreatedOn(), savedEvent.getDescription(), savedEvent.getEventDate(), savedEvent.getId(), userShortDto, locationDto, savedEvent.getPaid(), savedEvent.getParticipantLimit(), savedEvent.getPublishedOn(), savedEvent.getRequestModeration(), savedEvent.getState(), savedEvent.getTitle(), 0);
     }
 
