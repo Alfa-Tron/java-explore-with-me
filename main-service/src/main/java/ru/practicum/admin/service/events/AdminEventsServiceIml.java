@@ -110,11 +110,7 @@ public class AdminEventsServiceIml implements AdminEventsService {
     }
 
     private void updateEventParams(UpdateEventAdminRequest updateEventRequest, Event event) {
-        if (!Objects.isNull(updateEventRequest.getAnnotation())) {
-            if (updateEventRequest.getAnnotation().length() < 20 ||
-                    updateEventRequest.getAnnotation().length() > 2000) {
-                throw new BadRequestException("Annotation length cannot be less than 20 or more than 2000");
-            }
+        if (!Objects.isNull(updateEventRequest.getAnnotation()) && !updateEventRequest.getAnnotation().isBlank()) {
             event.setAnnotation(updateEventRequest.getAnnotation());
         }
 
@@ -126,11 +122,7 @@ public class AdminEventsServiceIml implements AdminEventsService {
             event.setCategory(category);
         }
 
-        if (!Objects.isNull(updateEventRequest.getDescription())) {
-            if (updateEventRequest.getDescription().length() < 20 ||
-                    updateEventRequest.getDescription().length() > 7000) {
-                throw new BadRequestException("Description length cannot be less than 20 or more than 7000");
-            }
+        if (!Objects.isNull(updateEventRequest.getDescription()) && !updateEventRequest.getDescription().isBlank()) {
             event.setDescription(updateEventRequest.getDescription());
         }
 
@@ -156,11 +148,7 @@ public class AdminEventsServiceIml implements AdminEventsService {
             event.setRequestModeration(updateEventRequest.getRequestModeration());
         }
 
-        if (!Objects.isNull(updateEventRequest.getTitle())) {
-            if (updateEventRequest.getTitle().length() < 3 ||
-                    updateEventRequest.getTitle().length() > 120) {
-                throw new BadRequestException("Title length cannot be less than 3 or more than 120");
-            }
+        if (!Objects.isNull(updateEventRequest.getTitle()) && !updateEventRequest.getTitle().isBlank()) {
             event.setTitle(updateEventRequest.getTitle());
         }
     }

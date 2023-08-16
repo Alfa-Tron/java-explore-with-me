@@ -29,7 +29,7 @@ public class StserverController {
                                        @RequestParam(name = "uris", required = false) List<String> uris) {
         String s = URLDecoder.decode(start, StandardCharsets.UTF_8);
         String e = URLDecoder.decode(end, StandardCharsets.UTF_8);
-        String ss = URLDecoder.decode(s, StandardCharsets.UTF_8);// не понимаю почему приходится 2 раза декодировать
+        String ss = URLDecoder.decode(s, StandardCharsets.UTF_8);//я ведь в клиенте кодирую, а тут должен раскодировать или я что-то не понял
         String ee = URLDecoder.decode(e, StandardCharsets.UTF_8);
         LocalDateTime start1 = LocalDateTime.parse(ss, formatter);
         LocalDateTime end1 = LocalDateTime.parse(ee, formatter);

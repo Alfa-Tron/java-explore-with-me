@@ -73,7 +73,7 @@ public class AdminServiceCompilationImpl implements AdminServiceCompilation {
         }
         compilation.setEvents(events);
 
-        if (!Objects.isNull(updateCompilationRequest.getTitle())) {
+        if (!Objects.isNull(updateCompilationRequest.getTitle()) && !updateCompilationRequest.getTitle().isBlank()) {
             compilation.setTitle(updateCompilationRequest.getTitle());
         }
 

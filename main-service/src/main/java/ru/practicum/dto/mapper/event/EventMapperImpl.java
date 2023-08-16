@@ -18,7 +18,7 @@ public class EventMapperImpl implements EventMapper {
 
     @Override
     public Event newEventDtoToEvent(NewEventDto dto, Category category, Location location, User user) {
-        return new Event(dto.getAnnotation(), dto.getDescription(), dto.getEventDate(), dto.getPaid(), dto.getParticipantLimit(), dto.getRequestModeration(), dto.getTitle(), category, location, user);
+        return new Event(dto.getAnnotation(), dto.getDescription(), dto.getEventDate(), dto.isPaid(), dto.getParticipantLimit(), dto.isRequestModeration(), dto.getTitle(), category, location, user);
     }
 
     @Override

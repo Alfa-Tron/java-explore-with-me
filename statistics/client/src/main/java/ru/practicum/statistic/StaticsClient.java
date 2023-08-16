@@ -11,15 +11,13 @@ import ru.practicum.EndpointDtoIn;
 import ru.practicum.baseClient.BaseClient;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class StaticsClient extends BaseClient {
 
     @Autowired
-    public StaticsClient(@Value("http://stats-server:9090") String serverUrl, RestTemplateBuilder builder) {
+    public StaticsClient(@Value("${st.server.address}") String serverUrl, RestTemplateBuilder builder) {
         super(
                 builder
                         .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))
@@ -36,12 +34,6 @@ public class StaticsClient extends BaseClient {
                                            LocalDateTime end,
                                            boolean unique,
                                            List<String> uris) {
-
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("start", start);
-        parameters.put("end", end);
-        parameters.put("unique", unique);
-        parameters.put("uris", String.join(",",uris));
         return get(start,end,unique,uris);
 
     }

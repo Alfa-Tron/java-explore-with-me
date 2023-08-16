@@ -1,5 +1,6 @@
 package ru.practicum.baseClient;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,11 @@ import java.util.Map;
 
 public class BaseClient {
     protected final RestTemplate rest;
+    @Value("${st.server.addressStats}")
+    String serverUrl;
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
 
     public BaseClient(RestTemplate rest) {
         this.rest = rest;
@@ -50,14 +56,13 @@ public class BaseClient {
     }
 
     private <T> ResponseEntity<Object> makeAndSendRequest(LocalDateTime start, LocalDateTime end, boolean unique, List<String> uris) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String st = URLEncoder.encode(start.format(formatter), StandardCharsets.UTF_8);
         String en = URLEncoder.encode(end.format(formatter), StandardCharsets.UTF_8);
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("http://stats-server:9090/stats")
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(serverUrl)
                 .queryParam("start", st)
                 .queryParam("end", en)
-                .queryParam("uris", uris)
+                .queryParam("uris", String.join(",",uris))
                 .queryParam("unique", unique);
 
         String finalUrl = builder.toUriString();
