@@ -14,12 +14,13 @@ import ru.practicum.dto.event.UpdateEventUserRequest;
 import ru.practicum.privateUser.service.event.PrivateUserEventService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
 @RequestMapping(path = "/users/{userId}/events")
 @RequiredArgsConstructor
-@Validated
 public class PrivateEventController {
     private final PrivateUserEventService privateUserService;
 
@@ -32,7 +33,8 @@ public class PrivateEventController {
     }
 
     @GetMapping
-    public List<EventShortDto> getEvents(@PathVariable Long userId, @RequestParam(name = "from", defaultValue = "0") Integer from, @RequestParam(name = "size", defaultValue = "10") Integer size) {
+    @Validated
+    public List<EventShortDto> getEvents(@PathVariable Long userId, @RequestParam(name = "from", defaultValue = "0") @PositiveOrZero Integer from, @RequestParam(name = "size", defaultValue = "10") @Positive Integer size) {
         return privateUserService.getUserEvents(userId, from, size);
 
     }

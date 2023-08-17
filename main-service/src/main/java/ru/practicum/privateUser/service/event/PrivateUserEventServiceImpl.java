@@ -107,24 +107,6 @@ public class PrivateUserEventServiceImpl implements PrivateUserEventService {
 
     }
 
-    private Location getLocationOrAddNew(LocationDto locationDto) {
-        Location location = locationRepository.findByLatAndLon(
-                locationDto.getLat(),
-                locationDto.getLon());
-
-        if (Objects.isNull(location)) {
-            location = locationRepository.save(locationMapper.dtoToLocation(locationDto));
-        }
-        return location;
-    }
-
-    private void validateEventDate(LocalDateTime eventDate) {
-        if (LocalDateTime.now().plusHours(2).isAfter(eventDate)) {
-            throw new BadRequestException(String.format("Event date=%s cannot be before now + 2 hours date.", eventDate));
-        }
-    }
-
-
     @Override
     public List<EventShortDto> getUserEvents(Long userId, Integer from, Integer size) {
         userRepository.findById(userId).orElseThrow(
@@ -209,6 +191,32 @@ public class PrivateUserEventServiceImpl implements PrivateUserEventService {
         return eventFullDto;
     }
 
+    @Override
+    public List<ParticipationRequestDto> getRequests(Long userId, Long eventId) {
+        List<Request> requests = requestRepository.findByEventInitiatorIdAndEventId(userId, eventId);
+
+        return requests.stream()
+                .map(participationRequestMapper::requestToDto)
+                .collect(Collectors.toList());
+    }
+
+    private Location getLocationOrAddNew(LocationDto locationDto) {
+        Location location = locationRepository.findByLatAndLon(
+                locationDto.getLat(),
+                locationDto.getLon());
+
+        if (Objects.isNull(location)) {
+            location = locationRepository.save(locationMapper.dtoToLocation(locationDto));
+        }
+        return location;
+    }
+
+    private void validateEventDate(LocalDateTime eventDate) {
+        if (LocalDateTime.now().plusHours(2).isAfter(eventDate)) {
+            throw new BadRequestException(String.format("Event date=%s cannot be before now + 2 hours date.", eventDate));
+        }
+    }
+
     private void updateEventParams(UpdateEventUserRequest updateEventRequest, Event event) {
 
         if (!Objects.isNull(updateEventRequest.getAnnotation()) && !updateEventRequest.getAnnotation().isBlank()) {
@@ -253,13 +261,4 @@ public class PrivateUserEventServiceImpl implements PrivateUserEventService {
         }
     }
 
-
-    @Override
-    public List<ParticipationRequestDto> getRequests(Long userId, Long eventId) {
-        List<Request> requests = requestRepository.findByEventInitiatorIdAndEventId(userId, eventId);
-
-        return requests.stream()
-                .map(participationRequestMapper::requestToDto)
-                .collect(Collectors.toList());
-    }
 }

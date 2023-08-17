@@ -7,8 +7,8 @@ import lombok.Setter;
 @Setter
 @Getter
 public class ErrorResponse {
-    private  String error;
-    private  String stackTrace;
+    private String error;
+    private String stackTrace;
 
 
     public ErrorResponse(String error, String stackTrace) {

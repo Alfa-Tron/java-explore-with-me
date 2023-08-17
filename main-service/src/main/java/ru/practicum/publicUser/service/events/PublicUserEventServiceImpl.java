@@ -23,7 +23,7 @@ import ru.practicum.statClient.StatClientService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -95,7 +95,7 @@ public class PublicUserEventServiceImpl implements PublicUserEventService {
 
         statClientService.createHit(request);
 
-        Map<Long, Integer> hits = new HashMap<>();
+        Map<Long, Integer> hits = Collections.EMPTY_MAP;
         if (!result.isEmpty()) {
             hits = statClientService.getStatsFromEvents(result);
         }

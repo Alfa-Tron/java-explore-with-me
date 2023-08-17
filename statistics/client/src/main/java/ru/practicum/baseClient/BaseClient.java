@@ -20,9 +20,8 @@ import java.util.Map;
 public class BaseClient {
     protected final RestTemplate rest;
     @Value("${st.server.addressStats}")
-    String serverUrl;
-
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private String serverUrl;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
 
     public BaseClient(RestTemplate rest) {
@@ -62,7 +61,7 @@ public class BaseClient {
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(serverUrl)
                 .queryParam("start", st)
                 .queryParam("end", en)
-                .queryParam("uris", String.join(",",uris))
+                .queryParam("uris", String.join(",", uris))
                 .queryParam("unique", unique);
 
         String finalUrl = builder.toUriString();

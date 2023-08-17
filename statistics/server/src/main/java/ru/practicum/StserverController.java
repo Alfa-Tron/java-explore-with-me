@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.Mapper.EndPointMapper;
-import ru.practicum.model.ViewStatsDto;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -20,8 +19,8 @@ public class StserverController {
     private final StServerService stServerService;
     private final EndPointMapper endpointMapper;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-
+//    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH%%253Amm%%253Ass");
+//если правильно понял/ пытался так/ но вероятно не так понял)
     @GetMapping("/stats")
     public List<ViewStatsDto> getStats(@RequestParam(name = "start") String start,
                                        @RequestParam(name = "end") String end,
@@ -29,7 +28,7 @@ public class StserverController {
                                        @RequestParam(name = "uris", required = false) List<String> uris) {
         String s = URLDecoder.decode(start, StandardCharsets.UTF_8);
         String e = URLDecoder.decode(end, StandardCharsets.UTF_8);
-        String ss = URLDecoder.decode(s, StandardCharsets.UTF_8);//я ведь в клиенте кодирую, а тут должен раскодировать или я что-то не понял
+        String ss = URLDecoder.decode(s, StandardCharsets.UTF_8);
         String ee = URLDecoder.decode(e, StandardCharsets.UTF_8);
         LocalDateTime start1 = LocalDateTime.parse(ss, formatter);
         LocalDateTime end1 = LocalDateTime.parse(ee, formatter);

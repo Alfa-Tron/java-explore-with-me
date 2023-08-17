@@ -61,6 +61,7 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST.name(), "", Arrays.toString(e.getStackTrace()));
     }
 
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {

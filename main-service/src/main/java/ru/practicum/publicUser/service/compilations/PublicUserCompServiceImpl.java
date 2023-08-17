@@ -32,7 +32,11 @@ public class PublicUserCompServiceImpl implements PublicUserCompService {
     public List<CompilationDto> getCompilations(Boolean pinned, Integer from, Integer size) {
         Pageable pageable = PageRequest.of(from, size);
         List<Compilation> compilations;
-        compilations = compilationRepository.findAllByPinned(pinned, pageable);
+        if (pinned == null) {
+            compilations = compilationRepository.findAll(pageable).getContent();
+        } else {
+            compilations = compilationRepository.findAllByPinned(pinned, pageable);
+        }
 
         return compilations.stream()
                 .map(c -> compilationMapper.compToDto(c, c.getEvents().stream()

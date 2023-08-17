@@ -43,7 +43,7 @@ public class StatClientServiceImpl implements StatClientService {
         }
         if (st == null) return Collections.EMPTY_MAP;
 
-        LocalDateTime start = LocalDateTime.now().minusYears(10);
+        LocalDateTime start = st;
         LocalDateTime end = LocalDateTime.now();
 
         ResponseEntity<Object> response = statsClient.getStats(start, end, true, uris);
