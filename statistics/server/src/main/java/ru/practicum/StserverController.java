@@ -18,8 +18,9 @@ import java.util.List;
 public class StserverController {
     private final StServerService stServerService;
     private final EndPointMapper endpointMapper;
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-//    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH%%253Amm%%253Ass");
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    //    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH%%253Amm%%253Ass");
 //если правильно понял/ пытался так/ но вероятно не так понял)
     @GetMapping("/stats")
     public List<ViewStatsDto> getStats(@RequestParam(name = "start") String start,
