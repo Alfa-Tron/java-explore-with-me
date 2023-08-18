@@ -18,11 +18,11 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/admin/events")
 @RequiredArgsConstructor
+@Validated
 public class AdminEventController {
     private final AdminEventsService adminEventsService;
 
     @GetMapping
-    @Validated
     public List<EventFullDto> findEvents(@RequestParam(name = "users", required = false) List<Long> userIds,
                                          @RequestParam(name = "states", required = false) List<EventState> states,
                                          @RequestParam(name = "categories", required = false) List<Long> categoryIds,

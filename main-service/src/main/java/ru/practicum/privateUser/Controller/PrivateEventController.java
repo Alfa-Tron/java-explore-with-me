@@ -21,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/users/{userId}/events")
 @RequiredArgsConstructor
+@Validated
 public class PrivateEventController {
     private final PrivateUserEventService privateUserService;
 
@@ -33,7 +34,6 @@ public class PrivateEventController {
     }
 
     @GetMapping
-    @Validated
     public List<EventShortDto> getEvents(@PathVariable Long userId, @RequestParam(name = "from", defaultValue = "0") @PositiveOrZero Integer from, @RequestParam(name = "size", defaultValue = "10") @Positive Integer size) {
         return privateUserService.getUserEvents(userId, from, size);
 

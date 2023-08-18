@@ -18,11 +18,11 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/events")
+@Validated
 public class PublicUserEventsController {
     private final PublicUserEventService publicUserService;
 
     @GetMapping
-    @Validated
     public List<EventShortDto> getEvents(@RequestParam(value = "text", required = false) String text,
                                          @RequestParam(value = "categories", required = false) List<Long> categories,
                                          @RequestParam(value = "paid", required = false) Boolean paid,

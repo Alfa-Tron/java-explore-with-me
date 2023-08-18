@@ -13,11 +13,11 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/compilations")
+@Validated
 public class PublicUserCompilationController {
     private final PublicUserCompService publicUserService;
 
     @GetMapping
-    @Validated
     public List<CompilationDto> getCompilations(@RequestParam(name = "pinned", required = false) Boolean pinned, @RequestParam(name = "from", defaultValue = "0") @PositiveOrZero Integer from, @RequestParam(name = "size", defaultValue = "10") @Positive Integer size) {
         return publicUserService.getCompilations(pinned, from, size);
 

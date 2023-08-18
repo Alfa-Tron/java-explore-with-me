@@ -13,12 +13,12 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/categories")
+@Validated
 public class PublicUserCategoriesController {
     private final PublicUserCatService publicUserService;
 
 
     @GetMapping
-    @Validated
     public List<CategoryDto> getCategories(@RequestParam(name = "from", defaultValue = "0") @PositiveOrZero Integer from, @RequestParam(name = "size", defaultValue = "10") @Positive Integer size) {
         return publicUserService.getCategories(from, size);
     }
