@@ -3,6 +3,7 @@ package ru.practicum.admin.service.users;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.admin.repository.UserRepository;
@@ -29,7 +30,7 @@ public class AdminServiceUsersImpl implements AdminServiceUsers {
 
     @Override
     public List<UserDto> getUsers(List<Long> ids, Integer from, Integer size) {
-        Pageable pageable = PageRequest.of(from, size);
+        Pageable pageable = PageRequest.of(from, size, Sort.by(Sort.Direction.ASC, "id"));
         List<User> users = userRepository.getAllUsers(ids, pageable);
         return userMapper.usersToDtos(users);
 
