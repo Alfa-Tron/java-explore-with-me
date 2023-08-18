@@ -48,8 +48,7 @@ public class PublicUserEventServiceImpl implements PublicUserEventService {
 
         if (rangeStart != null && rangeEnd != null) {
             if (rangeEnd.isBefore(rangeStart)) {
-                throw new BadRequestException(String.format("Start date=%s cannot be before end date=%s",
-                        rangeStart, rangeEnd));
+                throw new BadRequestException(String.format("Start date=%s cannot be before end date=%s", rangeStart, rangeEnd));
             }
         }
 
@@ -57,8 +56,7 @@ public class PublicUserEventServiceImpl implements PublicUserEventService {
         BooleanBuilder builder = new BooleanBuilder();
 
         if (!Objects.isNull(text)) {
-            builder.and((QEvent.event.annotation.containsIgnoreCase(text)))
-                    .or(QEvent.event.description.containsIgnoreCase(text));
+            builder.and((QEvent.event.annotation.containsIgnoreCase(text))).or(QEvent.event.description.containsIgnoreCase(text));
         }
 
         if (!Objects.isNull(paid)) {
@@ -76,8 +74,7 @@ public class PublicUserEventServiceImpl implements PublicUserEventService {
         if (Objects.isNull(rangeStart) && Objects.isNull(rangeEnd)) {
             builder.and((QEvent.event.eventDate.after(LocalDateTime.now())));
         } else {
-            builder.and(QEvent.event.eventDate.after(rangeStart))
-                    .and(QEvent.event.eventDate.before(rangeEnd));
+            builder.and(QEvent.event.eventDate.after(rangeStart)).and(QEvent.event.eventDate.before(rangeEnd));
         }
 
         if (onlyAvailable) {
@@ -110,9 +107,7 @@ public class PublicUserEventServiceImpl implements PublicUserEventService {
             eventCommentCounts.put(projection.getEventId(), projection.getCount());
         }
 
-        List<EventShortDto> eventShortDtos = result.stream()
-                .map(e -> eventMapper.eventToShortDto(e, categoryMapper.categoryToDTO(e.getCategory()), userMapper.userToUserShort(e.getInitiator()), eventCommentCounts.get(e.getId())))
-                .collect(Collectors.toList());
+        List<EventShortDto> eventShortDtos = result.stream().map(e -> eventMapper.eventToShortDto(e, categoryMapper.categoryToDTO(e.getCategory()), userMapper.userToUserShort(e.getInitiator()), eventCommentCounts.get(e.getId()))).collect(Collectors.toList());
 
         for (EventShortDto eventShortDto : eventShortDtos) {
             eventShortDto.setViews(hits.getOrDefault(eventShortDto.getId(), 0));
@@ -124,8 +119,7 @@ public class PublicUserEventServiceImpl implements PublicUserEventService {
 
     @Override
     public EventFullDto getEvent(long id, HttpServletRequest request) {
-        Event event = eventRepository.findByIdAndPublished(id).orElseThrow(() ->
-                new ObjectNotFoundException(String.format("Event with id=%s was not found", id)));
+        Event event = eventRepository.findByIdAndPublished(id).orElseThrow(() -> new ObjectNotFoundException(String.format("Event with id=%s was not found", id)));
         List<Long> ids = new ArrayList<>();
         ids.add(id);
         List<EventCommentProjection> commentProjections = commentRepository.getCommentCountsForEvents(ids);
@@ -134,11 +128,7 @@ public class PublicUserEventServiceImpl implements PublicUserEventService {
             eventCommentCounts.put(projection.getEventId(), projection.getCount());
         }
 
-        EventFullDto eventFullDto = eventMapper.toFullEventDto(event,
-                categoryMapper.categoryToDTO(event.getCategory()),
-                locationMapper.lcToLocationDto(event.getLocation()),
-                userMapper.userToUserShort(event.getInitiator()),
-                eventCommentCounts.get(id));
+        EventFullDto eventFullDto = eventMapper.toFullEventDto(event, categoryMapper.categoryToDTO(event.getCategory()), locationMapper.lcToLocationDto(event.getLocation()), userMapper.userToUserShort(event.getInitiator()), eventCommentCounts.get(id));
 
         statClientService.createHit(request);
 

@@ -48,7 +48,6 @@ public class PrivateCommentController {
     @GetMapping("/users/{userId}/comments/{commentId}")
     public CommentFullDto getComment(@PathVariable Long userId,
                                      @PathVariable Long commentId) {
-
         return privateCommentService.getComment(userId, commentId);
 
     }
