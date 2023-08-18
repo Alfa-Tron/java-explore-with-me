@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class CommentMapperImpl implements CommentMapper {
     @Override
     public CommentFullDto commentToFullDto(Comment comment) {
-        return new CommentFullDto(comment.getId(), comment.getText(), comment.getActor(), comment.getEvent().getId(), comment.getCreated(), comment.getModified());
+        return new CommentFullDto(comment.getId(), comment.getText(), comment.getActor().getId(), comment.getEvent().getId(), comment.getCreated(), comment.getModified());
     }
 
     @Override

@@ -7,11 +7,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.admin.repository.CommentRepository;
 import ru.practicum.admin.repository.EventRepository;
+import ru.practicum.dto.comment.EventCommentProjection;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.dto.mapper.caregory.CategoryMapper;
-import ru.practicum.dto.mapper.comment.CommentMapper;
 import ru.practicum.dto.mapper.event.EventMapper;
 import ru.practicum.dto.mapper.location.LocationMapper;
 import ru.practicum.dto.mapper.user.UserMapper;
@@ -24,10 +25,7 @@ import ru.practicum.statClient.StatClientService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -42,7 +40,7 @@ public class PublicUserEventServiceImpl implements PublicUserEventService {
     private final UserMapper userMapper;
     private final LocationMapper locationMapper;
     private final StatClientService statClientService;
-    private final CommentMapper commentMapper;
+    private final CommentRepository commentRepository;
 
 
     @Override
@@ -101,8 +99,19 @@ public class PublicUserEventServiceImpl implements PublicUserEventService {
         if (!result.isEmpty()) {
             hits = statClientService.getStatsFromEvents(result);
         }
+        List<Long> ids = new ArrayList<>();
+        for (Event e : events) {
+            ids.add(e.getId());
+        }
+
+        List<EventCommentProjection> commentProjections = commentRepository.getCommentCountsForEvents(ids);
+        Map<Long, Long> eventCommentCounts = new HashMap<>();
+        for (EventCommentProjection projection : commentProjections) {
+            eventCommentCounts.put(projection.getEventId(), projection.getCount());
+        }
+
         List<EventShortDto> eventShortDtos = result.stream()
-                .map(e -> eventMapper.eventToShortDto(e, categoryMapper.categoryToDTO(e.getCategory()), userMapper.userToUserShort(e.getInitiator())))
+                .map(e -> eventMapper.eventToShortDto(e, categoryMapper.categoryToDTO(e.getCategory()), userMapper.userToUserShort(e.getInitiator()), eventCommentCounts.get(e.getId())))
                 .collect(Collectors.toList());
 
         for (EventShortDto eventShortDto : eventShortDtos) {
@@ -117,12 +126,19 @@ public class PublicUserEventServiceImpl implements PublicUserEventService {
     public EventFullDto getEvent(long id, HttpServletRequest request) {
         Event event = eventRepository.findByIdAndPublished(id).orElseThrow(() ->
                 new ObjectNotFoundException(String.format("Event with id=%s was not found", id)));
+        List<Long> ids = new ArrayList<>();
+        ids.add(id);
+        List<EventCommentProjection> commentProjections = commentRepository.getCommentCountsForEvents(ids);
+        Map<Long, Long> eventCommentCounts = new HashMap<>();
+        for (EventCommentProjection projection : commentProjections) {
+            eventCommentCounts.put(projection.getEventId(), projection.getCount());
+        }
 
         EventFullDto eventFullDto = eventMapper.toFullEventDto(event,
                 categoryMapper.categoryToDTO(event.getCategory()),
                 locationMapper.lcToLocationDto(event.getLocation()),
                 userMapper.userToUserShort(event.getInitiator()),
-                commentMapper.commentListToDtos(event.getComments()));
+                eventCommentCounts.get(id));
 
         statClientService.createHit(request);
 

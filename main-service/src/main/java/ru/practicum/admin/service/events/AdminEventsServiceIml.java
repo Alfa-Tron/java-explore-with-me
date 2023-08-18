@@ -7,13 +7,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.admin.repository.CategoryRepository;
+import ru.practicum.admin.repository.CommentRepository;
 import ru.practicum.admin.repository.EventRepository;
 import ru.practicum.admin.repository.LocationRepository;
+import ru.practicum.dto.comment.EventCommentProjection;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.UpdateEventAdminRequest;
 import ru.practicum.dto.location.LocationDto;
 import ru.practicum.dto.mapper.caregory.CategoryMapper;
-import ru.practicum.dto.mapper.comment.CommentMapper;
 import ru.practicum.dto.mapper.event.EventMapper;
 import ru.practicum.dto.mapper.location.LocationMapper;
 import ru.practicum.dto.mapper.user.UserMapper;
@@ -23,8 +24,7 @@ import ru.practicum.exeptions.ObjectNotFoundException;
 import ru.practicum.model.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -39,7 +39,7 @@ public class AdminEventsServiceIml implements AdminEventsService {
     private final LocationMapper locationMapper;
     private final CategoryRepository categoryRepository;
     private final LocationRepository locationRepository;
-    private final CommentMapper commentMapper;
+    private final CommentRepository commentRepository;
 
     @Override
     public List<EventFullDto> findEvents(List<Long> userIds, List<EventState> states, List<Long> categoryIds, LocalDateTime rangeStart, LocalDateTime rangeEnd, int from, int size) {
@@ -64,13 +64,21 @@ public class AdminEventsServiceIml implements AdminEventsService {
         Pageable pageable = PageRequest.of(from, size);
         Iterable<Event> events = eventRepository.findAll(builder, pageable);
         result = StreamSupport.stream(events.spliterator(), false).collect(Collectors.toList());
-
+        List<Long> ids = new ArrayList<>();
+        for (Event e : events) {
+            ids.add(e.getId());
+        }
+        List<EventCommentProjection> commentProjections = commentRepository.getCommentCountsForEvents(ids);
+        Map<Long, Long> eventCommentCounts = new HashMap<>();
+        for (EventCommentProjection projection : commentProjections) {
+            eventCommentCounts.put(projection.getEventId(), projection.getCount());
+        }
         return result.stream()
                 .map(e -> eventMapper.toFullEventDto(e,
                         categoryMapper.categoryToDTO(e.getCategory()),
                         locationMapper.lcToLocationDto(e.getLocation()),
                         userMapper.userToUserShort(e.getInitiator()),
-                        commentMapper.commentListToDtos(e.getComments())))
+                        eventCommentCounts.get(e.getId())))
                 .collect(Collectors.toList());
     }
 
@@ -105,12 +113,19 @@ public class AdminEventsServiceIml implements AdminEventsService {
         }
 
         Event updatedEvent = eventRepository.save(event);
+        List<Long> ids = new ArrayList<>();
+        ids.add(updatedEvent.getId());
+        List<EventCommentProjection> commentProjections = commentRepository.getCommentCountsForEvents(ids);
+        Map<Long, Long> eventCommentCounts = new HashMap<>();
+        for (EventCommentProjection projection : commentProjections) {
+            eventCommentCounts.put(projection.getEventId(), projection.getCount());
+        }
 
         return eventMapper.toFullEventDto(updatedEvent,
                 categoryMapper.categoryToDTO(updatedEvent.getCategory()),
                 locationMapper.lcToLocationDto(updatedEvent.getLocation()),
                 userMapper.userToUserShort(updatedEvent.getInitiator()),
-                commentMapper.commentListToDtos(updatedEvent.getComments()));
+                eventCommentCounts.get(updatedEvent.getId()));
     }
 
     private void updateEventParams(UpdateEventAdminRequest updateEventRequest, Event event) {

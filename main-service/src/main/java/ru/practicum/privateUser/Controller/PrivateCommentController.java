@@ -14,13 +14,12 @@ import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users/{userId}/events/{eventId}/comments")
 @RequiredArgsConstructor
 @Validated
 public class PrivateCommentController {
     private final PrivateCommentService privateCommentService;
 
-    @PostMapping
+    @PostMapping("/users/{userId}/events/{eventId}/comments")
     @ResponseStatus(HttpStatus.CREATED)
     public CommentFullDto createComment(@PathVariable Long userId,
                                         @PathVariable Long eventId,
@@ -28,36 +27,33 @@ public class PrivateCommentController {
         return privateCommentService.createComment(userId, eventId, requestCreateDto);
     }
 
-    @PatchMapping("/{commentId}")
+    @PatchMapping("/users/{userId}/comments/{commentId}")
     @ResponseStatus(HttpStatus.OK)
     public CommentFullDto patchComment(@PathVariable Long userId,
-                                       @PathVariable Long eventId,
                                        @PathVariable Long commentId,
                                        @RequestBody @Valid CommentCreateDto commentCreateDto) {
 
-        return privateCommentService.patchComment(userId, eventId, commentId, commentCreateDto);
+        return privateCommentService.patchComment(userId, commentId, commentCreateDto);
     }
 
-    @DeleteMapping("/{commentId}")
+    @DeleteMapping("/users/{userId}/comments/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteComment(@PathVariable Long userId,
-                              @PathVariable Long eventId,
                               @PathVariable Long commentId) {
-        privateCommentService.deleteComment(userId, eventId, commentId);
+        privateCommentService.deleteComment(userId, commentId);
 
 
     }
 
-    @GetMapping("/{commentId}")
+    @GetMapping("/users/{userId}/comments/{commentId}")
     public CommentFullDto getComment(@PathVariable Long userId,
-                                     @PathVariable Long eventId,
                                      @PathVariable Long commentId) {
 
-        return privateCommentService.getComment(userId, eventId, commentId);
+        return privateCommentService.getComment(userId, commentId);
 
     }
 
-    @GetMapping
+    @GetMapping("/users/{userId}/events/{eventId}/comments")
     public List<CommentFullDto> getCommentsByEvent(@PathVariable Long userId,
                                                    @PathVariable Long eventId,
                                                    @RequestParam(name = "from", defaultValue = "0") @PositiveOrZero int from,

@@ -6,12 +6,10 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.practicum.dto.User.UserShortDto;
 import ru.practicum.dto.category.CategoryDto;
-import ru.practicum.dto.comment.CommentDto;
 import ru.practicum.dto.location.LocationDto;
 import ru.practicum.model.EventState;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Setter
 @Getter
@@ -36,9 +34,9 @@ public class EventFullDto {
     private EventState state;
     private String title;
     private Integer views;
-    private List<CommentDto> comments;
+    private Long comments;
 
-    public EventFullDto(String annotation, CategoryDto category, int confirmedRequests, LocalDateTime createdOn, String description, LocalDateTime eventDate, Long id, UserShortDto initiator, LocationDto location, boolean paid, int participantLimit, LocalDateTime publishedOn, boolean requestModeration, EventState state, String title, Integer views, List<CommentDto> comments) {
+    public EventFullDto(String annotation, CategoryDto category, int confirmedRequests, LocalDateTime createdOn, String description, LocalDateTime eventDate, Long id, UserShortDto initiator, LocationDto location, boolean paid, int participantLimit, LocalDateTime publishedOn, boolean requestModeration, EventState state, String title, Integer views, Long comments) {
         this.annotation = annotation;
         this.category = category;
         this.confirmedRequests = confirmedRequests;

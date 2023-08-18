@@ -23,4 +23,6 @@ public interface EventRepository extends JpaRepository<Event, Long>, QuerydslPre
     Optional<Event> findByIdAndPublished(Long eventId);
 
     Set<Event> getByIdIn(Collection<Long> ids);
+
+    Optional<Event> findByIdAndPublishedOnIsNotNull(Long id);
 }

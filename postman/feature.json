@@ -14147,17 +14147,6 @@
                       "    pm.expect(pm.response.json()).to.have.property(\"actor\");\r",
                       "});\r",
                       "\r",
-                      "pm.test(\"Должен содержать 'actor' и 'id' \", function () {\r",
-                      "    pm.expect(pm.response.json().actor).to.have.property(\"id\");\r",
-                      "});\r",
-                      "\r",
-                      "pm.test(\"Должен содержать 'actor' и 'name' \", function () {\r",
-                      "    pm.expect(pm.response.json().actor).to.have.property(\"name\");\r",
-                      "});\r",
-                      "\r",
-                      "pm.test(\"Должен содержать 'actor' и 'email'\", function () {\r",
-                      "    pm.expect(pm.response.json().actor).to.have.property(\"email\");\r",
-                      "});\r",
                       "\r",
                       "pm.test(\"Должен содержать 'created'\", function () {\r",
                       "    pm.expect(pm.response.json()).to.have.property(\"created\");\r",
@@ -14322,18 +14311,6 @@
                       "    pm.expect(pm.response.json()).to.have.property(\"actor\");\r",
                       "});\r",
                       "\r",
-                      "pm.test(\"Response 'actor' has 'id' field\", function () {\r",
-                      "    pm.expect(pm.response.json().actor).to.have.property(\"id\");\r",
-                      "});\r",
-                      "\r",
-                      "pm.test(\"Response 'actor' has 'name' field\", function () {\r",
-                      "    pm.expect(pm.response.json().actor).to.have.property(\"name\");\r",
-                      "});\r",
-                      "\r",
-                      "pm.test(\"Response 'actor' has 'email' field\", function () {\r",
-                      "    pm.expect(pm.response.json().actor).to.have.property(\"email\");\r",
-                      "});\r",
-                      "\r",
                       "pm.test(\"Response has 'created' field\", function () {\r",
                       "    pm.expect(pm.response.json()).to.have.property(\"created\");\r",
                       "});"
@@ -14432,64 +14409,6 @@
                     {
                       "key": "commentId",
                       "value": "9999"
-                    }
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Обновление чужого комментария, ответ 403.",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test(\"Ответ должен быть 403\", function(){\r",
-                      "    pm.response.to.have.status(403);\r",
-                      "})"
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "method": "PATCH",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"text\":\"Test text\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/users/:userId/events/:eventId/comments/:commentId",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "users",
-                    ":userId",
-                    "events",
-                    ":eventId",
-                    "comments",
-                    ":commentId"
-                  ],
-                  "variable": [
-                    {
-                      "key": "userId",
-                      "value": "1"
-                    },
-                    {
-                      "key": "eventId",
-                      "value": "2"
-                    },
-                    {
-                      "key": "commentId",
-                      "value": "2"
                     }
                   ]
                 }

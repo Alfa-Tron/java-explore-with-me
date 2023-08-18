@@ -21,8 +21,9 @@ public class EventShortDto {
     private boolean paid;
     private String title;
     private Integer views;
+    private Long countComments;
 
-    public EventShortDto(String annotation, CategoryDto category, Integer confirmedRequests, LocalDateTime eventDate, Long id, UserShortDto initiator, boolean paid, String title) {
+    public EventShortDto(String annotation, CategoryDto category, Integer confirmedRequests, LocalDateTime eventDate, Long id, UserShortDto initiator, boolean paid, String title, Long countComments) {
         this.annotation = annotation;
         this.category = category;
         this.confirmedRequests = confirmedRequests;
@@ -31,5 +32,6 @@ public class EventShortDto {
         this.initiator = initiator;
         this.paid = paid;
         this.title = title;
+        this.countComments = countComments;
     }
 }
