@@ -10,7 +10,9 @@ import org.hibernate.annotations.WhereJoinTable;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -73,6 +75,8 @@ public class Event {
     @JoinTable(name = "requests", joinColumns = @JoinColumn(name = "event_id"),
             inverseJoinColumns = @JoinColumn(name = "requester_id"))
     private Set<User> participants = new HashSet<>();
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     public Event(String annotation, String description, LocalDateTime eventDate, Boolean paid, Integer participantLimit, Boolean requestModeration, String title, Category category, Location location, User user) {
         this.annotation = annotation;

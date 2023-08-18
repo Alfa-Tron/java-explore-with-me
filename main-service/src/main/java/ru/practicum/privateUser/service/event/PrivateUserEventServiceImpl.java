@@ -17,6 +17,7 @@ import ru.practicum.dto.event.NewEventDto;
 import ru.practicum.dto.event.UpdateEventUserRequest;
 import ru.practicum.dto.location.LocationDto;
 import ru.practicum.dto.mapper.caregory.CategoryMapper;
+import ru.practicum.dto.mapper.comment.CommentMapper;
 import ru.practicum.dto.mapper.event.EventMapper;
 import ru.practicum.dto.mapper.location.LocationMapper;
 import ru.practicum.dto.mapper.participation.ParticipationRequestMapper;
@@ -28,10 +29,7 @@ import ru.practicum.model.*;
 import ru.practicum.statClient.StatClientService;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,6 +47,7 @@ public class PrivateUserEventServiceImpl implements PrivateUserEventService {
     private final UserMapper userMapper;
     private final RequestRepository requestRepository;
     private final ParticipationRequestMapper participationRequestMapper;
+    private final CommentMapper commentMapper;
 
     @Override
     @Transactional
@@ -103,7 +102,7 @@ public class PrivateUserEventServiceImpl implements PrivateUserEventService {
         Event event = eventMapper.newEventDtoToEvent(newEventDto, category, location, user);
         UserShortDto userShortDto = userMapper.userToUserShort(user);
         Event savedEvent = eventRepository.save(event);
-        return eventMapper.toFullEventDto(savedEvent, categoryDto, locationDto, userShortDto);
+        return eventMapper.toFullEventDto(savedEvent, categoryDto, locationDto, userShortDto, Collections.emptyList());
 
     }
 
@@ -137,7 +136,8 @@ public class PrivateUserEventServiceImpl implements PrivateUserEventService {
         EventFullDto eventFullDto = eventMapper.toFullEventDto(event,
                 categoryMapper.categoryToDTO(event.getCategory()),
                 locationMapper.lcToLocationDto(event.getLocation()),
-                userMapper.userToUserShort(event.getInitiator()));
+                userMapper.userToUserShort(event.getInitiator()),
+                commentMapper.commentListToDtos(event.getComments()));
 
         eventFullDto.setViews(hits.getOrDefault(eventId, 0));
 
@@ -184,7 +184,8 @@ public class PrivateUserEventServiceImpl implements PrivateUserEventService {
         EventFullDto eventFullDto = eventMapper.toFullEventDto(updatedEvent,
                 categoryMapper.categoryToDTO(updatedEvent.getCategory()),
                 locationMapper.lcToLocationDto(updatedEvent.getLocation()),
-                userMapper.userToUserShort(updatedEvent.getInitiator()));
+                userMapper.userToUserShort(updatedEvent.getInitiator()),
+                Collections.emptyList());
 
         eventFullDto.setViews(hits.getOrDefault(eventId, 0));
 

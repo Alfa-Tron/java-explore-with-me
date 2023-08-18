@@ -3,6 +3,7 @@ package ru.practicum.dto.mapper.event;
 import org.springframework.stereotype.Component;
 import ru.practicum.dto.User.UserShortDto;
 import ru.practicum.dto.category.CategoryDto;
+import ru.practicum.dto.comment.CommentDto;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.dto.event.NewEventDto;
@@ -11,6 +12,8 @@ import ru.practicum.model.Category;
 import ru.practicum.model.Event;
 import ru.practicum.model.Location;
 import ru.practicum.model.User;
+
+import java.util.List;
 
 @Component
 public class EventMapperImpl implements EventMapper {
@@ -22,8 +25,8 @@ public class EventMapperImpl implements EventMapper {
     }
 
     @Override
-    public EventFullDto toFullEventDto(Event savedEvent, CategoryDto category, LocationDto locationDto, UserShortDto userShortDto) {
-        return new EventFullDto(savedEvent.getAnnotation(), category, savedEvent.getParticipants().size(), savedEvent.getCreatedOn(), savedEvent.getDescription(), savedEvent.getEventDate(), savedEvent.getId(), userShortDto, locationDto, savedEvent.getPaid(), savedEvent.getParticipantLimit(), savedEvent.getPublishedOn(), savedEvent.getRequestModeration(), savedEvent.getState(), savedEvent.getTitle(), 0);
+    public EventFullDto toFullEventDto(Event savedEvent, CategoryDto category, LocationDto locationDto, UserShortDto userShortDto, List<CommentDto> commentDtoList) {
+        return new EventFullDto(savedEvent.getAnnotation(), category, savedEvent.getParticipants().size(), savedEvent.getCreatedOn(), savedEvent.getDescription(), savedEvent.getEventDate(), savedEvent.getId(), userShortDto, locationDto, savedEvent.getPaid(), savedEvent.getParticipantLimit(), savedEvent.getPublishedOn(), savedEvent.getRequestModeration(), savedEvent.getState(), savedEvent.getTitle(), 0, commentDtoList);
     }
 
     @Override

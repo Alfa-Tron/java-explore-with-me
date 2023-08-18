@@ -13,6 +13,7 @@ import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.UpdateEventAdminRequest;
 import ru.practicum.dto.location.LocationDto;
 import ru.practicum.dto.mapper.caregory.CategoryMapper;
+import ru.practicum.dto.mapper.comment.CommentMapper;
 import ru.practicum.dto.mapper.event.EventMapper;
 import ru.practicum.dto.mapper.location.LocationMapper;
 import ru.practicum.dto.mapper.user.UserMapper;
@@ -38,6 +39,7 @@ public class AdminEventsServiceIml implements AdminEventsService {
     private final LocationMapper locationMapper;
     private final CategoryRepository categoryRepository;
     private final LocationRepository locationRepository;
+    private final CommentMapper commentMapper;
 
     @Override
     public List<EventFullDto> findEvents(List<Long> userIds, List<EventState> states, List<Long> categoryIds, LocalDateTime rangeStart, LocalDateTime rangeEnd, int from, int size) {
@@ -67,7 +69,8 @@ public class AdminEventsServiceIml implements AdminEventsService {
                 .map(e -> eventMapper.toFullEventDto(e,
                         categoryMapper.categoryToDTO(e.getCategory()),
                         locationMapper.lcToLocationDto(e.getLocation()),
-                        userMapper.userToUserShort(e.getInitiator())))
+                        userMapper.userToUserShort(e.getInitiator()),
+                        commentMapper.commentListToDtos(e.getComments())))
                 .collect(Collectors.toList());
     }
 
@@ -106,7 +109,8 @@ public class AdminEventsServiceIml implements AdminEventsService {
         return eventMapper.toFullEventDto(updatedEvent,
                 categoryMapper.categoryToDTO(updatedEvent.getCategory()),
                 locationMapper.lcToLocationDto(updatedEvent.getLocation()),
-                userMapper.userToUserShort(updatedEvent.getInitiator()));
+                userMapper.userToUserShort(updatedEvent.getInitiator()),
+                commentMapper.commentListToDtos(updatedEvent.getComments()));
     }
 
     private void updateEventParams(UpdateEventAdminRequest updateEventRequest, Event event) {

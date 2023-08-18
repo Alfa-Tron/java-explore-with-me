@@ -11,6 +11,7 @@ import ru.practicum.admin.repository.EventRepository;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.dto.mapper.caregory.CategoryMapper;
+import ru.practicum.dto.mapper.comment.CommentMapper;
 import ru.practicum.dto.mapper.event.EventMapper;
 import ru.practicum.dto.mapper.location.LocationMapper;
 import ru.practicum.dto.mapper.user.UserMapper;
@@ -41,6 +42,7 @@ public class PublicUserEventServiceImpl implements PublicUserEventService {
     private final UserMapper userMapper;
     private final LocationMapper locationMapper;
     private final StatClientService statClientService;
+    private final CommentMapper commentMapper;
 
 
     @Override
@@ -119,7 +121,8 @@ public class PublicUserEventServiceImpl implements PublicUserEventService {
         EventFullDto eventFullDto = eventMapper.toFullEventDto(event,
                 categoryMapper.categoryToDTO(event.getCategory()),
                 locationMapper.lcToLocationDto(event.getLocation()),
-                userMapper.userToUserShort(event.getInitiator()));
+                userMapper.userToUserShort(event.getInitiator()),
+                commentMapper.commentListToDtos(event.getComments()));
 
         statClientService.createHit(request);
 
