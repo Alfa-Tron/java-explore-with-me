@@ -3,9 +3,11 @@ package ru.practicum.admin.service.compilations;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.admin.repository.CommentRepository;
 import ru.practicum.admin.repository.CompilationRepository;
 import ru.practicum.admin.repository.EventRepository;
 import ru.practicum.dto.Requests.UpdateCompilationRequest;
+import ru.practicum.dto.comment.EventCommentProjection;
 import ru.practicum.dto.compilation.CompilationDto;
 import ru.practicum.dto.compilation.NewCompilationDto;
 import ru.practicum.dto.mapper.Compilation.CompilationMapper;
@@ -16,9 +18,7 @@ import ru.practicum.exeptions.ObjectNotFoundException;
 import ru.practicum.model.Compilation;
 import ru.practicum.model.Event;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,6 +31,7 @@ public class AdminServiceCompilationImpl implements AdminServiceCompilation {
     private final EventMapper eventMapper;
     private final CategoryMapper categoryMapper;
     private final UserMapper userMapper;
+    private final CommentRepository commentRepository;
 
 
     @Override
@@ -46,10 +47,11 @@ public class AdminServiceCompilationImpl implements AdminServiceCompilation {
 
         Compilation savedCompilation = compilationRepository.save(compilation);
 
+
         return compilationMapper.compToDto(savedCompilation, events.stream()
                 .map(e -> eventMapper.eventToShortDto(e,
                         categoryMapper.categoryToDTO(e.getCategory()),
-                        userMapper.userToUserShort(e.getInitiator())))
+                        userMapper.userToUserShort(e.getInitiator()), 0L))
                 .collect(Collectors.toList()));
     }
 
@@ -80,13 +82,23 @@ public class AdminServiceCompilationImpl implements AdminServiceCompilation {
         if (!Objects.isNull(updateCompilationRequest.getPinned())) {
             compilation.setPinned(updateCompilationRequest.getPinned());
         }
+        List<Long> ids = new ArrayList<>(events.size());
+        for (Event e : events) {
+            ids.add(e.getId());
+        }
 
         Compilation savedCompilation = compilationRepository.save(compilation);
+        List<EventCommentProjection> commentProjections = commentRepository.getCommentCountsForEvents(ids);
+        Map<Long, Long> eventCommentCounts = new HashMap<>();
+        for (EventCommentProjection projection : commentProjections) {
+            eventCommentCounts.put(projection.getEventId(), projection.getCount());
+        }
 
         return compilationMapper.compToDto(savedCompilation, events.stream()
                 .map(e -> eventMapper.eventToShortDto(e,
                         categoryMapper.categoryToDTO(e.getCategory()),
-                        userMapper.userToUserShort(e.getInitiator())))
+                        userMapper.userToUserShort(e.getInitiator()),
+                        eventCommentCounts.get(e.getId())))
                 .collect(Collectors.toList()));
     }
 }

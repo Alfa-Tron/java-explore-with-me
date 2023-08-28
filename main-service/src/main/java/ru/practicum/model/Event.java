@@ -74,6 +74,7 @@ public class Event {
             inverseJoinColumns = @JoinColumn(name = "requester_id"))
     private Set<User> participants = new HashSet<>();
 
+
     public Event(String annotation, String description, LocalDateTime eventDate, Boolean paid, Integer participantLimit, Boolean requestModeration, String title, Category category, Location location, User user) {
         this.annotation = annotation;
         this.category = category;

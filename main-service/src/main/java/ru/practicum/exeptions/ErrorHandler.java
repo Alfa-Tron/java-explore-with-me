@@ -83,5 +83,12 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.name(), "", Arrays.toString(e.getStackTrace()));
     }
 
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponse handleAccessEx(AccessException e) {
+        log.debug("Получен статус 403 {}", Arrays.toString(e.getStackTrace()));
+        return new ErrorResponse(e.getMessage(), HttpStatus.FORBIDDEN.name(), e.getMessage(), Arrays.toString(e.getStackTrace()));
+    }
+
 
 }

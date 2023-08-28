@@ -11,6 +11,7 @@ import ru.practicum.dto.Requests.EventRequestStatusUpdateResult;
 import ru.practicum.dto.Requests.ParticipationRequestDto;
 import ru.practicum.dto.User.UserShortDto;
 import ru.practicum.dto.category.CategoryDto;
+import ru.practicum.dto.comment.EventCommentProjection;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.dto.event.NewEventDto;
@@ -28,10 +29,7 @@ import ru.practicum.model.*;
 import ru.practicum.statClient.StatClientService;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,6 +47,7 @@ public class PrivateUserEventServiceImpl implements PrivateUserEventService {
     private final UserMapper userMapper;
     private final RequestRepository requestRepository;
     private final ParticipationRequestMapper participationRequestMapper;
+    private final CommentRepository commentRepository;
 
     @Override
     @Transactional
@@ -103,7 +102,7 @@ public class PrivateUserEventServiceImpl implements PrivateUserEventService {
         Event event = eventMapper.newEventDtoToEvent(newEventDto, category, location, user);
         UserShortDto userShortDto = userMapper.userToUserShort(user);
         Event savedEvent = eventRepository.save(event);
-        return eventMapper.toFullEventDto(savedEvent, categoryDto, locationDto, userShortDto);
+        return eventMapper.toFullEventDto(savedEvent, categoryDto, locationDto, userShortDto, 0L);
 
     }
 
@@ -118,8 +117,19 @@ public class PrivateUserEventServiceImpl implements PrivateUserEventService {
 
         Map<Long, Integer> hits = statClientService.getStatsFromEvents(events);
 
+        List<Long> ids = new ArrayList<>(events.size());
+        for (Event e : events) {
+            ids.add(e.getId());
+        }
+        List<EventCommentProjection> commentProjections = commentRepository.getCommentCountsForEvents(ids);
+        Map<Long, Long> eventCommentCounts = new HashMap<>();
+        for (EventCommentProjection projection : commentProjections) {
+            eventCommentCounts.put(projection.getEventId(), projection.getCount());
+        }
+
+
         return events.stream()
-                .map(e -> eventMapper.eventToShortDto(e, categoryMapper.categoryToDTO(e.getCategory()), userMapper.userToUserShort(e.getInitiator())))
+                .map(e -> eventMapper.eventToShortDto(e, categoryMapper.categoryToDTO(e.getCategory()), userMapper.userToUserShort(e.getInitiator()), eventCommentCounts.get(e.getId())))
                 .peek(e -> e.setViews(hits.getOrDefault(e.getId(), 0)))
                 .collect(Collectors.toList());
     }
@@ -133,11 +143,19 @@ public class PrivateUserEventServiceImpl implements PrivateUserEventService {
                 () -> new ObjectNotFoundException(String.format("Event with id=%s was not found", eventId)));
 
         Map<Long, Integer> hits = statClientService.getStatsFromEvents(List.of(event));
+        List<Long> ids = new ArrayList<>();
+        ids.add(event.getId());
+        List<EventCommentProjection> commentProjections = commentRepository.getCommentCountsForEvents(ids);
+        Map<Long, Long> eventCommentCounts = new HashMap<>();
+        for (EventCommentProjection projection : commentProjections) {
+            eventCommentCounts.put(projection.getEventId(), projection.getCount());
+        }
 
         EventFullDto eventFullDto = eventMapper.toFullEventDto(event,
                 categoryMapper.categoryToDTO(event.getCategory()),
                 locationMapper.lcToLocationDto(event.getLocation()),
-                userMapper.userToUserShort(event.getInitiator()));
+                userMapper.userToUserShort(event.getInitiator()),
+                eventCommentCounts.get(eventId));
 
         eventFullDto.setViews(hits.getOrDefault(eventId, 0));
 
@@ -180,11 +198,20 @@ public class PrivateUserEventServiceImpl implements PrivateUserEventService {
         Event updatedEvent = eventRepository.save(event);
 
         Map<Long, Integer> hits = statClientService.getStatsFromEvents(List.of(event));
+        List<Long> ids = new ArrayList<>();
+        ids.add(updatedEvent.getId());
+
+        List<EventCommentProjection> commentProjections = commentRepository.getCommentCountsForEvents(ids);
+        Map<Long, Long> eventCommentCounts = new HashMap<>();
+        for (EventCommentProjection projection : commentProjections) {
+            eventCommentCounts.put(projection.getEventId(), projection.getCount());
+        }
 
         EventFullDto eventFullDto = eventMapper.toFullEventDto(updatedEvent,
                 categoryMapper.categoryToDTO(updatedEvent.getCategory()),
                 locationMapper.lcToLocationDto(updatedEvent.getLocation()),
-                userMapper.userToUserShort(updatedEvent.getInitiator()));
+                userMapper.userToUserShort(updatedEvent.getInitiator()),
+                eventCommentCounts.get(eventId));
 
         eventFullDto.setViews(hits.getOrDefault(eventId, 0));
 

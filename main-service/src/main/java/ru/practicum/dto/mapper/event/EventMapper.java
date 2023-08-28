@@ -14,7 +14,7 @@ import ru.practicum.model.User;
 public interface EventMapper {
     Event newEventDtoToEvent(NewEventDto newEventDto, Category category, Location location, User user);
 
-    EventFullDto toFullEventDto(Event savedEvent, CategoryDto category, LocationDto locationDto, UserShortDto userShortDto);
+    EventFullDto toFullEventDto(Event savedEvent, CategoryDto category, LocationDto locationDto, UserShortDto userShortDto, Long com);
 
-    EventShortDto eventToShortDto(Event e, CategoryDto categoryDto, UserShortDto userDto);
+    EventShortDto eventToShortDto(Event e, CategoryDto categoryDto, UserShortDto userDto, Long comments);
 }
